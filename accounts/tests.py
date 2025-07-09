@@ -2,11 +2,12 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
-from accounts.views import RegisterView
-from accounts.serializers import RegisterSerializer
+from accounts.serializers import AccontSerializer
+from accounts.views import AccountView
+
 User = get_user_model()
 
-class RegisterSerializerTest(APITestCase):
+class AccountSerializerTest(APITestCase):
     def test_valid_data(self):
         data = {
             'username': 'bdksj1',
@@ -14,7 +15,7 @@ class RegisterSerializerTest(APITestCase):
             'password': 'ajdhkn123213f',
         }
 
-        serializer = RegisterSerializer(data=data)
+        serializer = AccontSerializer(data=data)
         self.assertTrue(serializer.is_valid(), serializer.errors)
 
     def test_invalid_username(self):
@@ -24,7 +25,7 @@ class RegisterSerializerTest(APITestCase):
             'password': 'ajdhkn123213f',
         }
 
-        serializer = RegisterSerializer(data=data)
+        serializer = AccontSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
     def test_invalid_email(self):
@@ -34,7 +35,7 @@ class RegisterSerializerTest(APITestCase):
             'password': 'ajdhkn123213f',
         }
 
-        serializer = RegisterSerializer(data=data)
+        serializer = AccontSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
     def test_invalid_password(self):
@@ -44,7 +45,7 @@ class RegisterSerializerTest(APITestCase):
             'password': 'a',
         }
 
-        serializer = RegisterSerializer(data=data)
+        serializer = AccontSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
     def test_missing_email(self):
@@ -53,10 +54,10 @@ class RegisterSerializerTest(APITestCase):
             'password': 'adeferh7863546',
         }
 
-        serializer = RegisterSerializer(data=data)
+        serializer = AccontSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
-class SignupTest(TestCase):
+class AccountTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
 
@@ -71,7 +72,7 @@ class SignupTest(TestCase):
             content_type='application/json',
         )
 
-        response = RegisterView.as_view()(request)
+        response = AccountView.as_view()(request)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -87,7 +88,7 @@ class SignupTest(TestCase):
             content_type='application/json',
         )
 
-        response = RegisterView.as_view()(request)
+        response = AccountView.as_view()(request)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

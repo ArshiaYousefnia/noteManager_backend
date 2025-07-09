@@ -1,28 +1,30 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
-from .serializers import RegisterSerializer, ProfileSerializer
+from .serializers import AccontSerializer
 
-class RegisterView(APIView):
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+class AccountView(APIView):
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [AllowAny()]
+        else:
+            return [IsAuthenticated()]
 
     def get(self, request):
-        serializer = ProfileSerializer(request.user)
+        serializer = AccontSerializer(request.user)
         return Response(serializer.data)
 
     def patch(self, request):
-        serializer = ProfileSerializer(request.user, data=request.data, partial=True)
+        serializer = AccontSerializer(request.user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+        serializer = AccontSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
