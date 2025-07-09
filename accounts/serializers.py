@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+import re
 
 User = get_user_model()
+USERNAME_REGEX = r'^[a-zA-Z][a-zA-Z0-9_]{2,29}$'
 
 class AccountSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=6)
@@ -38,7 +40,10 @@ class AccountSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def validate_username(self, value):
-        if not value.isalnum() or len(value) < 6:
-            raise serializers.ValidationError('Username must be alphanumeric and more than 6 characters')
+    def validate_username_format(self, value):
+        if not re.match(USERNAME_REGEX, value):
+            raise serializers.ValidationError(
+                "Username must start with a letter and contain only letters, digits, or underscores. "
+                "Length must be between 3 and 30 characters."
+            )
         return value

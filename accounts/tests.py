@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, APITestCase
+from rest_framework.test import APIRequestFactory, APITestCase, force_authenticate
 from accounts.serializers import AccountSerializer
 from accounts.views import AccountView
 
@@ -20,7 +20,7 @@ class AccountSerializerTest(APITestCase):
 
     def test_invalid_username(self):
         data = {
-            'username': '1ads',
+            'username': '%%2ccf123',
             'email': 'testemamil@email.co',
             'password': 'ajdhkn123213f',
         }
@@ -60,10 +60,11 @@ class AccountSerializerTest(APITestCase):
 class AccountTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
+        self.location = "/api/account/"
 
     def test_signup(self):
         request = self.factory.post(
-            'api/signup/',
+            self.location,
             {
                 'username': 'bdksj1',
                 'email': 'testemamil@email.co',
@@ -77,9 +78,9 @@ class AccountTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def testDuplicateUsernameSignup(self):
-        User.objects.create(username="abcd123", email="<EMAIL>", password="djksldksld")
+        User.objects.create(username="abcd123", email="email@email.com", password="djksldksld")
         request = self.factory.post(
-            'api/signup/',
+            self.location,
             {
                 'username': 'abcd123',
                 'email': 'testemail@email.com',
@@ -92,4 +93,29 @@ class AccountTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def testAccountGet(self):
+        user = User.objects.create(username="abcd123", email="email@emil.com", password="djksldksld")
+        request = self.factory.get(
+            self.location,
+            content_type='application/json',
+        )
+        force_authenticate(request, user)
+
+        response = AccountView.as_view()(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def testAccountUpdate(self):
+        user = User.objects.create(username="abcd123", email="email@emil.com", password="djksldksld")
+        request = self.factory.get(
+            self.location,
+            {
+                'bio': "dsjkadjsldkjas",
+                'username': "abcd12345"
+            },
+            content_type='application/json',
+        )
+        force_authenticate(request, user)
+
+        response = AccountView.as_view()(request)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
