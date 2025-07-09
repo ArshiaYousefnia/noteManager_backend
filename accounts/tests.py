@@ -27,6 +27,34 @@ class RegisterSerializerTest(APITestCase):
         serializer = RegisterSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
+    def test_invalid_email(self):
+        data = {
+            'username': 'user1234',
+            'email': 'testdsil.co',
+            'password': 'ajdhkn123213f',
+        }
+
+        serializer = RegisterSerializer(data=data)
+        self.assertFalse(serializer.is_valid(), serializer.errors)
+
+    def test_invalid_password(self):
+        data = {
+            'username': 'user1234',
+            'email': 'testemamil@email.co',
+            'password': 'a',
+        }
+
+        serializer = RegisterSerializer(data=data)
+        self.assertFalse(serializer.is_valid(), serializer.errors)
+
+    def test_missing_email(self):
+        data = {
+            'username': 'user1234',
+            'password': 'adeferh7863546',
+        }
+
+        serializer = RegisterSerializer(data=data)
+        self.assertFalse(serializer.is_valid(), serializer.errors)
 
 class SignupTest(TestCase):
     def setUp(self):
