@@ -4,3 +4,12 @@ __pycache__/
 *.pyd
 .env
 .env.*
+README.md
+.gitignore
+.git
+.venv
+.idea
+.dockerignore
+Dockerfile
+docker-compose.yml
+docker-compose.db.yml
