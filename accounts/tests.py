@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
-from accounts.serializers import AccontSerializer
+from accounts.serializers import AccountSerializer
 from accounts.views import AccountView
 
 User = get_user_model()
@@ -15,7 +15,7 @@ class AccountSerializerTest(APITestCase):
             'password': 'ajdhkn123213f',
         }
 
-        serializer = AccontSerializer(data=data)
+        serializer = AccountSerializer(data=data)
         self.assertTrue(serializer.is_valid(), serializer.errors)
 
     def test_invalid_username(self):
@@ -25,7 +25,7 @@ class AccountSerializerTest(APITestCase):
             'password': 'ajdhkn123213f',
         }
 
-        serializer = AccontSerializer(data=data)
+        serializer = AccountSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
     def test_invalid_email(self):
@@ -35,7 +35,7 @@ class AccountSerializerTest(APITestCase):
             'password': 'ajdhkn123213f',
         }
 
-        serializer = AccontSerializer(data=data)
+        serializer = AccountSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
     def test_invalid_password(self):
@@ -45,7 +45,7 @@ class AccountSerializerTest(APITestCase):
             'password': 'a',
         }
 
-        serializer = AccontSerializer(data=data)
+        serializer = AccountSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
     def test_missing_email(self):
@@ -54,7 +54,7 @@ class AccountSerializerTest(APITestCase):
             'password': 'adeferh7863546',
         }
 
-        serializer = AccontSerializer(data=data)
+        serializer = AccountSerializer(data=data)
         self.assertFalse(serializer.is_valid(), serializer.errors)
 
 class AccountTest(TestCase):
