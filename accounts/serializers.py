@@ -23,3 +23,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+
+    def validate_username(self, value):
+        if not value.isalnum() or len(value) < 6:
+            raise serializers.ValidationError('Username must be alphanumeric and more than 6 characters')
+        return value
