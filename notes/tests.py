@@ -31,4 +31,16 @@ class NoteSerializerTest(TestCase):
 
         self.assertTrue(Note.objects.filter(uuid=data['uuid'], user=self.user).exists())
 
+    def test_serializer_partial_update(self):
+        self.note = Note.objects.create(user=self.user, content="test md\n### title")
+        data = {
+            "content": "new md"
+        }
+
+        serializer = NoteSerializer(user=self.user, instance=self.note, data=data, partial=True)
+
+        serializer.is_valid()
+        serializer.save()
+
+        self.assertEqual(self.note.content, data['content'])
 
