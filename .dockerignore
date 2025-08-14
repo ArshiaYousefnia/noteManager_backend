@@ -12,4 +12,4 @@ README.md
 .dockerignore
 Dockerfile
 docker-compose.yml
-docker-compose.db.yml
+db.docker-compose.yml

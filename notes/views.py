@@ -26,7 +26,7 @@ class NoteListView(APIView):
 
         note = serializer.save()
 
-        return Response(note, status=status.HTTP_201_CREATED)
+        return Response(NoteSerializer(note).data, status=status.HTTP_201_CREATED)
 
 class NoteDetailView(APIView):
     permission_classes = [IsAuthenticated]
