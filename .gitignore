@@ -2,6 +2,7 @@
 *__pycache__*
 *.pyc
 
-*.env
+.env.*
+.env
 .idea*
-docker-compose.db.yml
+db.docker-compose.yml
